@@ -23,7 +23,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @Bean
   public ViewResolver viewResolver() {
-    InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+    InternalResourceViewResolver resolver = new InternalResourceViewResolver();  /*HTML的视图解析器*/
     resolver.setPrefix("/WEB-INF/views/");
     resolver.setSuffix(".jsp");
     return resolver;
@@ -39,27 +39,32 @@ public class WebConfig extends WebMvcConfigurerAdapter {
    */
   @Configuration
   public static class ContentNegotiationConfig extends WebMvcConfigurerAdapter {
-    
+    /*配置ContentNegotiationManager*/
     @Bean
     public ViewResolver cnViewResolver(ContentNegotiationManager cnm) {
       ContentNegotiatingViewResolver cnvr =
           new ContentNegotiatingViewResolver();
-      cnvr.setContentNegotiationManager(cnm);
+      cnvr.setContentNegotiationManager(cnm);/*注入ContentNegotiationManager*/
       return cnvr;
     }
 
     @Override
+    /*获得ContentNegotiationManager*/
+    /*默认为HTML*/
+    /*ContentNegotiationConfigurer中的一些方法对应于ContentNegotiationManager的Setter方法*/
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
       configurer.defaultContentType(MediaType.TEXT_HTML);
     }
     
     @Bean
+    /*以bean的形式查找视图*/
     public ViewResolver beanNameViewResolver() {
        return new BeanNameViewResolver();
     }
     
     @Bean
-    public View spittles() {
+    /*将"spittles"定义为JSON视图*/
+    public View spittles() {  /*bean名称匹配逻辑视图的名称*/
       return new MappingJackson2JsonView();
     }
     
